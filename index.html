@@ -1,0 +1,328 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex, nofollow"><style>*{box-sizing:border-box}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>خريطة النسب المالية</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a mind map — the hub sits in the centre column with DuPont + the income-statement ladder; the five ratio families branch out to the right and left as trees. Clicking a card draws its links to related formulas. */
+:root{
+  --bg:#f3f5f6; --surface:#ffffff; --fg:#17201f; --muted:#5b6866; --line:#d5dcdb; --hub:#17201f; --hub-fg:#f3f5f6;
+  --liq:#0f7f86; --act:#b06a00; --debt:#c0392b; --prof:#2f7d32; --mkt:#2a5db0; --dup:#7b3fa6;
+  --hit:#ffe58a; --hit-fg:#17201f;
+  --f-display:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-math:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111716; --surface:#1a2221; --fg:#e6ecea; --muted:#9aa8a5; --line:#2d3836; --hub:#e6ecea; --hub-fg:#111716;
+  --liq:#3fc1c8; --act:#f0a63a; --debt:#ff7a6b; --prof:#6cc56f; --mkt:#79a6f2; --dup:#c08ae6;
+  --hit:#6b5a12; --hit-fg:#fff6cc; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111716; --surface:#1a2221; --fg:#e6ecea; --muted:#9aa8a5; --line:#2d3836; --hub:#e6ecea; --hub-fg:#111716;
+  --liq:#3fc1c8; --act:#f0a63a; --debt:#ff7a6b; --prof:#6cc56f; --mkt:#79a6f2; --dup:#c08ae6;
+  --hit:#6b5a12; --hit-fg:#fff6cc; color-scheme:dark}
+
+html{direction:rtl}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 48px}
+.wrap{max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header.top{display:flex;flex-direction:column;gap:6px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,3vw,34px);margin:0;text-wrap:balance;line-height:1.25}
+.sub{color:var(--muted);margin:0;max-width:70ch}
+
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tools .lbl{font-weight:600;font-size:13px;color:var(--muted);margin-inline-end:4px}
+.ing{font:500 13px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:baseline}
+.ing span.en{font-family:var(--f-math);direction:ltr}
+.ing small{color:var(--muted);font-size:11px}
+.ing[aria-pressed="true"]{background:var(--hub);color:var(--hub-fg);border-color:var(--hub)}
+.ing[aria-pressed="true"] small{color:var(--hub-fg);opacity:.75}
+.ing:focus-visible,.card:focus-visible,.rel-chip:focus-visible,.rung:focus-visible,#clear:focus-visible{outline:2px solid var(--mkt);outline-offset:2px}
+#clear{font:500 13px var(--f-body);background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;padding:4px 6px}
+#status{font-size:13px;color:var(--muted);min-height:1.6em}
+
+/* map */
+.map{position:relative;display:grid;gap:28px 56px;grid-template-columns:minmax(0,1fr) minmax(320px,440px) minmax(0,1fr);align-items:start}
+#links{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:visible}
+.col{display:flex;flex-direction:column;gap:28px;min-width:0;position:relative;z-index:1}
+.col.r{grid-column:1}.col.c{grid-column:2}.col.l{grid-column:3}
+
+.hub{background:var(--hub);color:var(--hub-fg);border-radius:18px;padding:20px 22px;text-align:center;display:flex;flex-direction:column;gap:4px}
+.hub .k{font-family:var(--f-display);font-size:22px;font-weight:700}
+.hub .e{font-family:var(--f-math);direction:ltr;opacity:.8}
+.hub .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;font-size:12px;margin-top:8px;opacity:.9}
+
+.branch{--c:var(--muted);display:flex;flex-direction:column;gap:12px}
+.bh{display:flex;align-items:center;gap:10px;align-self:flex-start;background:var(--c);color:var(--surface);border-radius:12px;padding:8px 16px}
+.bh .n{font-family:var(--f-display);font-weight:600;font-size:17px}
+.bh .en{font-family:var(--f-math);direction:ltr;font-size:13px;opacity:.9}
+.bh-desc{font-size:13px;color:var(--muted);margin:0;max-width:52ch}
+.col.r .bh{align-self:flex-end}
+.col.r .bh-desc{align-self:flex-end;text-align:left}
+.col.c .bh{align-self:center}.col.c .bh-desc{text-align:center;align-self:center}
+.list{display:flex;flex-direction:column;gap:12px;position:relative}
+/* tree trunk on the side facing the hub */
+.col.l .list{border-inline-start:2px solid var(--c);padding-inline-start:18px;margin-inline-start:10px}
+.col.r .list{border-inline-end:2px solid var(--c);padding-inline-end:18px;margin-inline-end:10px}
+.col.l .list>.card::before,.col.r .list>.card::before{content:"";position:absolute;top:26px;width:18px;height:2px;background:var(--c)}
+.col.l .list>.card::before{inset-inline-start:-20px}
+.col.r .list>.card::before{inset-inline-end:-20px}
+
+.liq{--c:var(--liq)}.act{--c:var(--act)}.debt{--c:var(--debt)}.prof{--c:var(--prof)}.mkt{--c:var(--mkt)}.dup{--c:var(--dup)}
+
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:opacity .2s,border-color .2s,box-shadow .2s;min-width:0}
+.card:hover{border-color:var(--c)}
+.card .hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.card .en{font-family:var(--f-math);font-weight:600;font-size:17px;direction:ltr;color:var(--c)}
+.card .ar{font-size:13px;color:var(--muted)}
+.card.helper{border-style:dashed}
+.dup .fx{font-size:12.5px;flex-wrap:nowrap;justify-content:flex-start}
+.card.helper .en{font-size:15px}
+.fx{direction:ltr;font-family:var(--f-math);font-size:15.5px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;padding:10px 6px;background:color-mix(in srgb,var(--c) 7%,var(--surface));border-radius:10px;text-align:center;line-height:1.35;overflow-x:auto}
+.fx .lhs{font-weight:600;white-space:nowrap}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;max-width:100%}
+.frac>.num{padding:0 6px 3px;border-bottom:1.5px solid currentColor}
+.frac>.den{padding:3px 6px 0}
+.t{border-radius:4px;padding:0 2px;transition:background .2s}
+.t.hit{background:var(--hit);color:var(--hit-fg)}
+.mean{margin:0;font-size:14px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12.5px}
+.badge{border-radius:6px;padding:1px 8px;font-weight:600;border:1px solid currentColor}
+.badge.up{color:var(--prof)}.badge.down{color:var(--debt)}.badge.risk{color:var(--act)}.badge.terms{color:var(--mkt)}
+.ex{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+.ex b{color:var(--fg);font-weight:500}
+.note{font-size:12.5px;color:var(--muted);margin:0;border-inline-start:3px solid var(--line);padding-inline-start:8px}
+.rels{display:flex;flex-wrap:wrap;gap:6px}
+.rel-chip{font:500 12px var(--f-body);background:none;border:1px dashed var(--c);color:var(--fg);border-radius:8px;padding:2px 8px;cursor:pointer;text-align:start}
+.rel-chip b{font-family:var(--f-math);direction:ltr;unicode-bidi:isolate;color:var(--c)}
+
+.map.focus .card:not(.on):not(.rel){opacity:.28}
+.map.focus .ladder{opacity:.6}
+.card.on{border-color:var(--c);box-shadow:0 0 0 2px var(--c)}
+.card.rel{border-color:var(--c)}
+
+/* income statement ladder */
+.ladder{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;transition:opacity .2s}
+.ladder h3{font-family:var(--f-display);font-size:15px;margin:0 0 4px;font-weight:600}
+.ladder p{margin:0 0 8px;font-size:12.5px;color:var(--muted)}
+.rung{all:unset;display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:8px;padding:4px 6px;border-radius:8px;cursor:pointer;direction:ltr;font-family:var(--f-math);font-size:14px}
+.rung:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.rung .op{color:var(--muted);text-align:center}
+.rung.res{font-weight:600}
+.rung .feeds{font-family:var(--f-body);font-size:11.5px;color:var(--prof);direction:rtl}
+.rung[aria-pressed="true"]{background:var(--hit);color:var(--hit-fg)}
+
+.steps{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+.steps h3{font-family:var(--f-display);font-size:15px;margin:0 0 6px;font-weight:600}
+.steps ol{margin:0;padding-inline-start:20px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+
+@media (max-width:1099px){
+  .map{grid-template-columns:minmax(0,1fr);gap:28px}
+  .col.r,.col.c,.col.l{grid-column:1}
+  .col.c{order:-1}
+  #links{display:none}
+  .col.r .bh,.col.r .bh-desc{align-self:flex-start;text-align:start}
+  .col.r .list{border-inline-end:none;padding-inline-end:0;margin-inline-end:0;border-inline-start:2px solid var(--c);padding-inline-start:18px;margin-inline-start:10px}
+  .col.r .list>.card::before{inset-inline-end:auto;inset-inline-start:-20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>خريطة قوانين النسب المالية · Chapter 3</h1>
+    <p class="sub">كل القوانين في مكان واحد. دوس على أي قانون عشان تشوف القوانين اللي مرتبطة بيه بخطوط، أو دوس على مكوّن من تحت عشان تشوف كل القوانين اللي بتستخدمه.</p>
+  </header>
+
+  <div class="tools" id="ings" aria-label="مكونات مشتركة">
+    <span class="lbl">مكونات مشتركة:</span>
+  </div>
+  <div id="status" aria-live="polite"></div>
+
+  <div class="map" id="map">
+    <svg id="links" aria-hidden="true"></svg>
+    <div class="col r" id="colR"></div>
+    <div class="col c" id="colC">
+      <div class="hub" id="hub">
+        <div class="k">النسب المالية</div>
+        <div class="e">Financial Ratio Analysis</div>
+        <div class="legend"><span>↑ الأعلى أفضل</span><span>↓ الأقل أفضل</span><span>⇢ قانون مرتبط</span></div>
+      </div>
+    </div>
+    <div class="col l" id="colL"></div>
+  </div>
+
+  <div class="steps">
+    <h3>لما تحلل أي نسبة، اعمل 3 حاجات</h3>
+    <ol>
+      <li>افتكر النسبة دي بتقيس إيه.</li>
+      <li>فسّر الرقم (كل 1 من المقام بيقابله كام من البسط) وقول الأعلى أفضل ولا الأقل.</li>
+      <li>قارن بمتوسط الصناعة أو الشركة الرائدة أو السنين اللي فاتت.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+const LBL={CA:"Current assets",CL:"Current liabilities",INV:"Inventory",COGS:"Cost of goods sold",AR:"Accounts receivable",SALES:"Sales",AP:"Accounts payable",PUR:"Purchases",TA:"Total assets",TL:"Total liabilities",CSE:"Common stock equity",EBIT:"EBIT",INT:"Interest",LEASE:"Lease payments",GP:"Gross profit",OP:"Operating profits",EACS:"Earnings available for common stockholders",SH:"No. of common shares outstanding",MPS:"Market price per share",EPS:"Earnings per share",BVPS:"Book value per share",DPS:"Annual dividends per share",DIV:"Dividends paid",D365:"365",IT:"Inventory turnover",NPM:"Net profit margin",TAT:"Total asset turnover",ROA:"ROA",EM:"EM",ROE:"ROE"};
+const T=c=>`<span class="t" data-t="${c}">${LBL[c]}</span>`;
+const fr=(n,d)=>`<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const eq=(l,r)=>`<span class="lhs">${l} =</span> ${r}`;
+
+const BR={
+  liq:{n:"نسب السيولة",en:"Liquidity ratios",d:"قدرة الشركة تسدد التزاماتها قصيرة الأجل. الأعلى أفضل لحد معين.",col:"R"},
+  act:{n:"نسب النشاط",en:"Activity ratios",d:"الشركة بتشغّل أصولها بكفاءة قد إيه عشان تعمل مبيعات وكاش. نوع الصناعة بيفرق.",col:"R"},
+  debt:{n:"نسب الديون",en:"Debt ratios",d:"قد إيه من الأصول متموّل بالديون، وقدرة الشركة تغطي الديون دي (coverage).",col:"R"},
+  prof:{n:"نسب الربحية",en:"Profitability ratios",d:"ربحية الشركة من المبيعات والأصول وحقوق الملكية. كلها الأعلى أفضل.",col:"L"},
+  mkt:{n:"نسب السوق",en:"Market ratios",d:"المستثمرين شايفين أداء الإدارة ومستقبل الشركة إزاي.",col:"L"},
+  dup:{n:"نظام DuPont",en:"DuPont system",d:"بيفكك ROE لـ 3 أجزاء عشان تعرف المشكلة جاية منين.",col:"C"}
+};
+
+const F=[
+ {id:"cr",b:"liq",en:"Current ratio",ar:"النسبة الجارية",f:eq("CR",fr(T("CA"),T("CL"))),mean:"الأصول المتداولة بتغطي الالتزامات قصيرة الأجل كام مرة.",dir:"up",dirT:"↑ الأعلى أفضل (لحد معين)",ex:"2,446,000 ÷ 1,240,000 = <b>1.97 times</b>",ing:["CA","CL"],rel:[["qr","نفس القانون بس بنطرح المخزون"]]},
+ {id:"qr",b:"liq",en:"Quick (acid-test) ratio",ar:"نسبة السيولة السريعة",f:eq("QR",fr(`${T("CA")} − ${T("INV")}`,T("CL"))),mean:"زي النسبة الجارية من غير المخزون، لأنه أبطأ أصل يتحول لكاش.",dir:"up",dirT:"↑ الأعلى أفضل (لحد معين)",ex:"(2,446,000 − 578,000) ÷ 1,240,000 = <b>1.5 times</b>",ing:["CA","INV","CL"],rel:[["cr","أصله النسبة الجارية"],["it","المخزون ده نفسه مقام معدل دوران المخزون"]]},
+
+ {id:"it",b:"act",en:"Inventory turnover",ar:"معدل دوران المخزون",f:eq("IT",fr(T("COGS"),T("INV"))),mean:"المخزون بيتباع ويتجدد كام مرة في السنة.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"4,176,000 ÷ 578,000 = <b>7.2 times</b>",ing:["COGS","INV"],rel:[["aai","365 ÷ الناتج ده = متوسط عمر المخزون"],["qr","نفس المخزون اللي بيتطرح في Quick ratio"]]},
+ {id:"aai",b:"act",en:"Average age of inventory",ar:"متوسط عمر المخزون",f:eq("AAI",fr(T("D365"),T("IT"))),mean:"المخزون بيقعد كام يوم لحد ما يتباع.",dir:"down",dirT:"↓ الأقل أفضل",ex:"365 ÷ 7.2 = <b>50.7 days</b>",ing:["D365","IT","INV"],rel:[["it","مبني على معدل دوران المخزون"],["acp","نفس فكرة الـ 365 يوم"]]},
+ {id:"acp",b:"act",en:"Average collection period",ar:"متوسط فترة التحصيل",f:eq("ACP",fr(T("AR"),`(${T("SALES")} ÷ ${T("D365")})`)),mean:"بنحصّل فلوسنا من العملاء في كام يوم (فلوس داخلة). بتتقارن بشروط الائتمان.",dir:"down",dirT:"↓ الأقل أفضل",ex:"1,006,000 ÷ (6,148,000 ÷ 365) = <b>59.7 days</b>",ing:["AR","SALES","D365"],rel:[["app","العكس: فلوس خارجة للموردين"],["tat","نفس المبيعات في البسط"]]},
+ {id:"app",b:"act",en:"Average payment period",ar:"متوسط فترة السداد",f:eq("APP",fr(T("AP"),`(${T("PUR")} ÷ ${T("D365")})`)),mean:"بندفع للموردين في كام يوم (فلوس خارجة).",dir:"terms",dirT:"↑ أفضل في حدود شروط الائتمان",ex:"Purchases = 70% × COGS → 764,000 ÷ 8,008 = <b>95.4 days</b>",ing:["AP","PUR","D365","COGS"],rel:[["acp","العكس: فلوس داخلة من العملاء"]]},
+ {id:"tat",b:"act",en:"Total asset turnover",ar:"معدل دوران الأصول",f:eq("TAT",fr(T("SALES"),T("TA"))),mean:"كل 1 جنيه أصول بيعمل كام جنيه مبيعات.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"6,148,000 ÷ 7,194,000 = <b>0.85 times</b>",ing:["SALES","TA"],rel:[["d2","جزء من DuPont: ROA = NPM × TAT"],["roa","نفس مقام ROA"]]},
+
+ {id:"dr",b:"debt",en:"Debt ratio",ar:"نسبة الديون",f:eq("DR",fr(T("TL"),T("TA"))),mean:"نسبة الأصول اللي متموّلة بالديون. بتعتمد على قدرة الشركة تخدم ديونها.",dir:"risk",dirT:"↑ = مخاطرة أعلى وعائد أعلى",ex:"3,286,000 ÷ 7,194,000 = <b>45.7%</b>",ing:["TL","TA"],rel:[["em","EM = 1 ÷ (1 − Debt ratio)"]]},
+ {id:"em",b:"debt",en:"Equity multiplier (EM)",ar:"مضاعف حقوق الملكية",f:eq("EM",fr(T("TA"),T("CSE"))),mean:"الأصول قد إيه حقوق المساهمين. كل ما يزيد يبقى فيه ديون أكتر (رافعة مالية).",dir:"risk",dirT:"↑ = ديون أكتر",ex:"7,194,000 ÷ 3,908,000 = <b>1.84</b> · في DuPont: <b>2.06</b>",note:"في مثال السلايد الأول اتقسم على إجمالي حقوق الملكية (3,908,000). في DuPont اتقسم على حقوق المساهمين العاديين (3,508,000) فطلع ≈ 2.06.",ing:["TA","CSE"],rel:[["dr","EM = 1 ÷ (1 − 0.457) = 1.84"],["d1","ROE = ROA × EM"],["roe","نفس الـ Common stock equity"]]},
+ {id:"tie",b:"debt",en:"Times interest earned",ar:"معدل تغطية الفوائد",f:eq("TIE",fr(T("EBIT"),T("INT"))),mean:"الأرباح قبل الفوائد والضرايب بتغطي الفوايد كام مرة.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"836,000 ÷ 186,000 = <b>4.49 times</b>",ing:["EBIT","OP","INT"],rel:[["fpc","نسخة موسعة بتضيف كل المدفوعات الثابتة"],["opm","EBIT = Operating profits"]]},
+ {id:"fpc",b:"debt",en:"Fixed-payment coverage ratio",ar:"معدل تغطية المدفوعات الثابتة",f:eq("FPC",fr(`${T("EBIT")} + ${T("LEASE")}`,`${T("INT")} + ${T("LEASE")} + {(Principal + Pref. stock div.) × [1 ÷ (1 − T)]}`)),mean:"الأرباح بتغطي كل المدفوعات الثابتة (فوايد + إيجار + أقساط + توزيعات ممتازة) كام مرة. T = نسبة الضريبة.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"906,000 ÷ 484,000 = <b>1.9 times</b>",ing:["EBIT","OP","INT","LEASE"],rel:[["tie","أصله معدل تغطية الفوائد"]]},
+
+ {id:"gpm",b:"prof",en:"Gross profit margin",ar:"هامش مجمل الربح",f:eq("GPM",fr(T("GP"),T("SALES"))),mean:"من كل 1 جنيه مبيعات، فاضل كام بعد تكلفة البضاعة.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"1,972,000 ÷ 6,148,000 = <b>32.1%</b>",ing:["GP","SALES"],rel:[["opm","نفس المقام، والسطر اللي بعده في قائمة الدخل"]]},
+ {id:"opm",b:"prof",en:"Operating profit margin",ar:"هامش ربح التشغيل",f:eq("OPM",fr(T("OP"),T("SALES"))),mean:"فاضل كام بعد تكلفة البضاعة ومصاريف التشغيل.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"836,000 ÷ 6,148,000 = <b>13.6%</b>",ing:["OP","EBIT","SALES"],rel:[["gpm","السطر اللي قبله"],["npm","السطر اللي بعده"],["tie","Operating profits = EBIT"]]},
+ {id:"npm",b:"prof",en:"Net profit margin",ar:"هامش صافي الربح",f:eq("NPM",fr(T("EACS"),T("SALES"))),mean:"فاضل كام صافي للمساهمين العاديين من كل 1 جنيه مبيعات.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"442,000 ÷ 6,148,000 = <b>7.2%</b>",ing:["EACS","SALES"],rel:[["d2","ROA = NPM × TAT"],["roa","نفس البسط"],["eps","نفس البسط"]]},
+ {id:"roa",b:"prof",en:"Return on assets (ROA)",ar:"العائد على الأصول",f:eq("ROA",fr(T("EACS"),T("TA"))),mean:"قدرة الشركة تحوّل أصولها لأرباح: كل 1 جنيه أصول بيجيب كام ربح. اسمه كمان return on investment.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"442,000 ÷ 7,194,000 = <b>6.1%</b>",ing:["EACS","TA"],rel:[["d2","ROA = NPM × TAT = 7.2% × 0.85"],["d1","ROE = ROA × EM"],["tat","نفس المقام"]]},
+ {id:"roe",b:"prof",en:"Return on equity (ROE)",ar:"العائد على حقوق الملكية",f:eq("ROE",fr(T("EACS"),T("CSE"))),mean:"كل 1 جنيه استثمره المساهمين العاديين بيجيب كام ربح.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"442,000 ÷ 3,508,000 = <b>12.6%</b>",ing:["EACS","CSE"],rel:[["d1","ROE = ROA × EM"],["d3","ROE = NPM × TAT × EM"],["bvps","نفس الـ Common stock equity"]]},
+
+ {id:"eps",b:"mkt",helper:true,en:"Earnings per share (EPS)",ar:"قانون مساعد · ربحية السهم",f:eq("EPS",fr(T("EACS"),T("SH"))),mean:"نصيب السهم الواحد من الأرباح. بنحتاجه عشان P/E.",ex:"442,000 ÷ 152,524 = <b>2.90</b>",ing:["EACS","SH"],rel:[["pe","مقام P/E"],["npm","نفس البسط"]]},
+ {id:"pe",b:"mkt",en:"Price/earnings ratio (P/E)",ar:"مضاعف الربحية",f:eq("P/E",fr(T("MPS"),T("EPS"))),mean:"المستثمر بيدفع كام في السهم عشان ياخد 1 جنيه أرباح. بيعكس ثقة السوق.",dir:"up",dirT:"↑ ثقة أعلى",ex:"32.25 ÷ 2.90 = <b>11.1</b>",ing:["MPS","EPS","EACS"],rel:[["eps","المقام بيتحسب منه"],["pbv","نفس البسط: سعر السهم"]]},
+ {id:"bvps",b:"mkt",helper:true,en:"Book value per share",ar:"قانون مساعد · القيمة الدفترية للسهم",f:eq("BVPS",fr(T("CSE"),T("SH"))),mean:"قيمة السهم في الدفاتر. بنحتاجه عشان P/BV.",ex:"3,508,000 ÷ 152,524 = <b>23</b>",ing:["CSE","SH"],rel:[["pbv","مقام P/BV"],["roe","نفس الـ Common stock equity"]]},
+ {id:"pbv",b:"mkt",en:"Price/book value (P/BV)",ar:"السعر للقيمة الدفترية",f:eq("P/BV",fr(T("MPS"),T("BVPS"))),mean:"سعر السهم في السوق قد إيه قيمته الدفترية (قيمة الإصدار).",dir:"up",dirT:"↑ الأعلى أفضل",ex:"32.25 ÷ 23.00 = <b>1.40</b>",ing:["MPS","BVPS","CSE"],rel:[["bvps","المقام بيتحسب منه"],["pe","نفس البسط: سعر السهم"]]},
+ {id:"dps",b:"mkt",helper:true,en:"Dividends per share (DPS)",ar:"قانون مساعد · توزيعات السهم",f:eq("DPS",fr(T("DIV"),T("SH"))),mean:"نصيب السهم من التوزيعات اللي اتدفعت في الفترة.",ex:"114,366 ÷ 152,524 = <b>0.75</b>",ing:["DIV","SH"],rel:[["dy","بسط Dividend yield"]]},
+ {id:"dy",b:"mkt",en:"Dividend yield",ar:"عائد التوزيعات",f:eq("DY",fr(T("DPS"),T("MPS"))),mean:"العائد النقدي من التوزيعات على سعر السهم، زي سعر الفايدة على الاستثمار.",dir:"up",dirT:"↑ الأعلى أفضل",ex:"0.75 ÷ 32.25 = <b>2.32%</b>",ing:["DPS","MPS","SH"],rel:[["dps","البسط بيتحسب منه"],["pe","نفس سعر السهم"]]},
+
+ {id:"d1",b:"dup",en:"Step 1 · ROE = ROA × EM",ar:"الخطوة 1",f:`${fr(T("EACS"),T("TA"))} × ${fr(T("TA"),T("CSE"))} = ${fr(T("EACS"),T("CSE"))}`,mean:"بنضرب قانون ROE في (Total assets ÷ Total assets) فبيطلع ROA × EM.",ex:"6.1% × 2.06 = <b>12.6%</b>",ing:["EACS","TA","CSE"],rel:[["roa","الجزء الأول"],["em","الجزء التاني"],["roe","الناتج"]]},
+ {id:"d2",b:"dup",en:"Step 2 · ROA = NPM × TAT",ar:"الخطوة 2",f:`${fr(T("EACS"),T("SALES"))} × ${fr(T("SALES"),T("TA"))} = ${fr(T("EACS"),T("TA"))}`,mean:"بنضرب ROA في (Sales ÷ Sales) فبيطلع هامش صافي الربح × دوران الأصول.",ex:"7.2% × 0.85 = <b>6.1%</b>",ing:["EACS","SALES","TA"],rel:[["npm","ربحية المبيعات"],["tat","كفاءة استخدام الأصول"],["roa","الناتج"]]},
+ {id:"d3",b:"dup",en:"Step 3 · Modified DuPont",ar:"الخطوة 3",f:`<span class="lhs">ROE =</span> ${T("NPM")} × ${T("TAT")} × ${T("EM")}`,mean:"ربط الخطوتين: (ربحية) × (استخدام الأصول) × (ديون). لو ROE واطي تعرف تشوف أنهي جزء السبب.",ex:"7.2% × 0.85 × 2.06 ≈ <b>12.6%</b>",ing:["NPM","TAT","EM","EACS","SALES","TA","CSE"],rel:[["npm","Profit"],["tat","Asset utilization"],["em","Debt"],["roe","الناتج"]]}
+];
+const byId=Object.fromEntries(F.map(x=>[x.id,x]));
+// make DuPont-step terms (NPM/TAT/EM) count as their ingredient ratios too
+const IMPLIES={NPM:["EACS","SALES"],TAT:["SALES","TA"],EM:["TA","CSE"],EPS:["EACS","SH"],BVPS:["CSE","SH"],DPS:["DIV","SH"],IT:["COGS","INV"],OP:["EBIT"],EBIT:["OP"]};
+
+function card(x){
+  const rels=x.rel.map(([id,n])=>`<button class="rel-chip" type="button" data-go="${id}">⇢ <b>${byId[id].en.replace(/ \(.*\)/,"").replace(/^Step \d · /,"")}</b> · ${n}</button>`).join("");
+  return `<div class="card ${x.helper?"helper":""}" id="c-${x.id}" data-id="${x.id}" tabindex="0" role="button" aria-label="${x.en}">
+    <div class="hd"><span class="en">${x.en}</span><span class="ar">${x.ar}</span></div>
+    <div class="fx">${x.f}</div>
+    <p class="mean">${x.mean}</p>
+    <div class="meta">${x.dirT?`<span class="badge ${x.dir}">${x.dirT}</span>`:""}<span class="ex">${x.ex}</span></div>
+    ${x.note?`<p class="note">${x.note}</p>`:""}
+    <div class="rels">${rels}</div></div>`;
+}
+function branch(k){
+  const b=BR[k];
+  return `<section class="branch ${k}" id="b-${k}"><div class="bh" id="h-${k}"><span class="n">${b.n}</span><span class="en">${b.en}</span></div><p class="bh-desc">${b.d}</p><div class="list">${F.filter(x=>x.b===k).map(card).join("")}</div></section>`;
+}
+const colR=document.getElementById("colR"),colL=document.getElementById("colL"),colC=document.getElementById("colC");
+colR.innerHTML=["liq","act","debt"].map(branch).join("");
+colL.innerHTML=["prof","mkt"].map(branch).join("");
+colC.insertAdjacentHTML("beforeend",branch("dup")+`
+<div class="ladder" id="ladder"><h3>قائمة الدخل: كل سطر بيغذّي أنهي قانون</h3><p>دوس على أي سطر عشان تشوف القوانين اللي بتستخدمه.</p>
+${[["","SALES","Sales revenue","كل الهوامش + TAT + ACP"],["−","COGS","Cost of goods sold","IT"],["=","GP","Gross profit","GPM",1],["−","","Operating expenses",""],["=","OP","Operating profits (EBIT)","OPM · TIE · FPC",1],["−","INT","Interest expense","TIE · FPC"],["=","","Net profit before tax",""],["−","","Taxes",""],["=","","Net profit after tax",""],["−","","Preferred stock dividends",""],["=","EACS","Earnings available for CS holders","NPM · ROA · ROE · EPS",1]].map(([o,c,l,f,r])=>`<button type="button" class="rung ${r?"res":""}" ${c?`data-ing="${c}"`:"disabled"}><span class="op">${o}</span><span>${l}</span><span class="feeds">${f}</span></button>`).join("")}
+</div>`);
+
+/* ingredient chips */
+const ING=[["SALES","المبيعات"],["TA","إجمالي الأصول"],["CSE","حقوق المساهمين"],["EACS","الربح المتاح للمساهمين"],["EBIT","EBIT"],["INV","المخزون"],["D365","365 يوم"],["SH","عدد الأسهم"],["MPS","سعر السهم"]];
+const ings=document.getElementById("ings");
+ings.insertAdjacentHTML("beforeend",ING.map(([c,a])=>`<button type="button" class="ing" data-ing="${c}" aria-pressed="false"><span class="en">${c==="EACS"?"Earnings avail. for CS":c==="D365"?"365":LBL[c]}</span><small>${a}</small></button>`).join("")+`<button type="button" id="clear" hidden>إلغاء التحديد</button>`);
+
+const map=document.getElementById("map"),svg=document.getElementById("links"),status=document.getElementById("status"),clearBtn=document.getElementById("clear");
+let sel=null,ingSel=null;
+
+function uses(x,c){
+  if(x.ing.includes(c))return true;
+  return x.ing.some(i=>(IMPLIES[i]||[]).includes(c));
+}
+function reset(){
+  sel=null;ingSel=null;map.classList.remove("focus");
+  document.querySelectorAll(".card").forEach(e=>e.classList.remove("on","rel"));
+  document.querySelectorAll(".t.hit").forEach(e=>e.classList.remove("hit"));
+  document.querySelectorAll("[aria-pressed]").forEach(e=>e.setAttribute("aria-pressed","false"));
+  clearBtn.hidden=true;status.textContent="";draw();
+}
+function selectCard(id,scroll){
+  const keep=sel===id&&!scroll; reset(); if(keep)return;
+  sel=id;const x=byId[id];map.classList.add("focus");
+  document.getElementById("c-"+id).classList.add("on");
+  x.rel.forEach(([r])=>document.getElementById("c-"+r).classList.add("rel"));
+  clearBtn.hidden=false;
+  status.textContent=`${x.en}: مرتبط بـ ${x.rel.length} قوانين`;
+  if(scroll)document.getElementById("c-"+id).scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});
+  draw();
+}
+function selectIng(c){
+  const keep=ingSel===c; reset(); if(keep)return;
+  ingSel=c;map.classList.add("focus");
+  document.querySelectorAll(`[data-ing="${c}"]`).forEach(e=>e.setAttribute("aria-pressed","true"));
+  const hits=F.filter(x=>uses(x,c));
+  hits.forEach(x=>document.getElementById("c-"+x.id).classList.add("rel"));
+  const alias=c==="EBIT"?["EBIT","OP"]:c==="OP"?["OP","EBIT"]:[c];
+  alias.forEach(a=>document.querySelectorAll(`.t[data-t="${a}"]`).forEach(e=>e.classList.add("hit")));
+  clearBtn.hidden=false;
+  status.textContent=`${c==="D365"?"365":LBL[c]} موجود في ${hits.length} قوانين`;
+  draw();
+}
+document.addEventListener("click",e=>{
+  const go=e.target.closest(".rel-chip");if(go){e.stopPropagation();selectCard(go.dataset.go,true);return;}
+  const ing=e.target.closest("[data-ing]");if(ing){selectIng(ing.dataset.ing);return;}
+  const c=e.target.closest(".card");if(c){selectCard(c.dataset.id,false);return;}
+  if(e.target===clearBtn)reset();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")reset();
+  if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("card")){e.preventDefault();selectCard(e.target.dataset.id,false);}
+});
+
+/* SVG connectors */
+function rect(el){const m=map.getBoundingClientRect(),r=el.getBoundingClientRect();return{l:r.left-m.left,r:r.right-m.left,t:r.top-m.top,b:r.bottom-m.top,cx:(r.left+r.right)/2-m.left,cy:(r.top+r.bottom)/2-m.top};}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function draw(){
+  if(innerWidth<1100){svg.innerHTML="";return;}
+  svg.setAttribute("width",map.offsetWidth);svg.setAttribute("height",map.offsetHeight);
+  let out="";const hub=rect(document.getElementById("hub"));
+  for(const k of Object.keys(BR)){
+    const h=rect(document.getElementById("h-"+k)),c=css("--"+k);
+    if(k==="dup"){out+=`<path d="M${hub.cx},${hub.b} L${h.cx},${h.t}" stroke="${c}" stroke-width="2.5" fill="none"/>`;continue;}
+    const right=h.cx>hub.cx,x1=right?hub.r:hub.l,y1=hub.cy,x2=right?h.l:h.r,y2=h.cy,mx=(x1+x2)/2;
+    out+=`<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}" stroke="${c}" stroke-width="2.5" fill="none" opacity=".85"/>`;
+  }
+  if(sel){
+    const s=rect(document.getElementById("c-"+sel)),col=css("--"+byId[sel].b),mid=map.offsetWidth/2;
+    for(const [r] of byId[sel].rel){
+      const t=rect(document.getElementById("c-"+r));let d;
+      if(Math.abs(s.cx-t.cx)<40){
+        const dir=s.cx<mid?1:-1,x1=dir>0?s.r:s.l,x2=dir>0?t.r:t.l,bulge=x1+dir*46;
+        d=`M${x1},${s.cy} C${bulge},${s.cy} ${bulge},${t.cy} ${x2},${t.cy}`;
+        out+=line(d,col,x1,s.cy,x2,t.cy);
+      }else{
+        const toRight=t.cx>s.cx,x1=toRight?s.r:s.l,x2=toRight?t.l:t.r,mx=(x1+x2)/2;
+        d=`M${x1},${s.cy} C${mx},${s.cy} ${mx},${t.cy} ${x2},${t.cy}`;
+        out+=line(d,col,x1,s.cy,x2,t.cy);
+      }
+    }
+  }
+  svg.innerHTML=out;
+}
+function line(d,c,x1,y1,x2,y2){return `<path d="${d}" stroke="${c}" stroke-width="2" stroke-dasharray="6 5" fill="none"/><circle cx="${x1}" cy="${y1}" r="4" fill="${c}"/><circle cx="${x2}" cy="${y2}" r="4" fill="${c}"/>`;}
+addEventListener("resize",draw);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+new ResizeObserver(draw).observe(map);
+draw();
+</script>
+</body></html>
